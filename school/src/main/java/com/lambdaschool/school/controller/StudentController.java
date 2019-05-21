@@ -45,10 +45,10 @@ public class StudentController
 
     @GetMapping(value = "/student/namelike/{name}",
                 produces = {"application/json"})
-    public ResponseEntity<?> getStudentByNameContaining(
+    public ResponseEntity<?> getStudentByNameContaining(@PageableDefault Pageable pageable,
             @PathVariable String name)
     {
-        List<Student> myStudents = studentService.findStudentByNameLike(name);
+        List<Student> myStudents = studentService.findStudentByNameLike(name, pageable);
         return new ResponseEntity<>(myStudents, HttpStatus.OK);
     }
 
