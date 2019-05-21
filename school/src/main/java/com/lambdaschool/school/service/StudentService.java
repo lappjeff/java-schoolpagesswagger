@@ -13,6 +13,8 @@ public interface StudentService
 
     List<Student> findStudentByNameLike(String name, Pageable pageable);
 
+    void addCourseToStudent(long studentid, long courseid);
+
     void delete(long id);
 
     Student save (Student student);

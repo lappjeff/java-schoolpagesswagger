@@ -108,7 +108,17 @@ public class StudentController
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
-    @ApiOperation(value = "Update an existing student", response = void.class)
+
+	@PostMapping(value = "addstudentcourse/{studentid}/{courseid}",
+				 consumes = "application/json",
+				 produces = "application/json")
+	public ResponseEntity<?> addCourseToStudent(@PathVariable long studentid, @PathVariable long courseid)
+	{
+		studentService.addCourseToStudent(studentid, courseid);
+
+		return new ResponseEntity<>(HttpStatus.CREATED);
+	}
+	@ApiOperation(value = "Update an existing student", response = void.class)
 	@ApiResponses({
 			@ApiResponse(code = 404, message = "Student not found", response = EntityNotFoundException.class)
 				  })
@@ -140,5 +150,7 @@ public class StudentController
         studentService.delete(Studentid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
+
+
 
 }

@@ -2,6 +2,7 @@ package com.lambdaschool.school.service;
 
 import com.lambdaschool.school.model.Course;
 import com.lambdaschool.school.model.Student;
+import com.lambdaschool.school.repository.CourseRepository;
 import com.lambdaschool.school.repository.StudentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -17,6 +18,9 @@ public class StudentServiceImpl implements StudentService
 {
     @Autowired
     private StudentRepository studrepos;
+
+    @Autowired
+	private CourseRepository courseRepository;
 
     @Override
     public List<Student> findAll(Pageable pageable)
@@ -77,4 +81,14 @@ public class StudentServiceImpl implements StudentService
 
         return studrepos.save(currentStudent);
     }
+
+	@Override
+	public void addCourseToStudent(long studentid, long courseid)
+	{
+		if(findStudentById(studentid) != null && courseRepository.findById(courseid) != null)
+		{
+			studrepos.addCourseToStudent(studentid, courseid);
+		}
+
+	}
 }
