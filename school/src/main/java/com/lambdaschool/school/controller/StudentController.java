@@ -108,11 +108,16 @@ public class StudentController
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
-
+	@ApiOperation(value = "Adds a new course to a student", response = void.class)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "courseid", required = true, value = "Id of course being added to student"),
+			@ApiImplicitParam(name = "studentid", required = true, value = "Id of student to add course to")
+					   })
 	@PostMapping(value = "addstudentcourse/{studentid}/{courseid}",
 				 consumes = "application/json",
 				 produces = "application/json")
-	public ResponseEntity<?> addCourseToStudent(@PathVariable long studentid, @PathVariable long courseid)
+	public ResponseEntity<?> addCourseToStudent(@PathVariable long studentid,
+												@PathVariable long courseid)
 	{
 		studentService.addCourseToStudent(studentid, courseid);
 
