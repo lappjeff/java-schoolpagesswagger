@@ -2,6 +2,7 @@ package com.lambdaschool.school.controller;
 
 import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.service.StudentService;
+import io.swagger.annotations.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -25,6 +26,18 @@ public class StudentController
 
     // Please note there is no way to add students to course yet!
 
+	@ApiOperation(value = "Returns a list of all restaurants, supports pagination", response = Student.class,
+				  responseContainer = "List")
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "Specifies the page " +
+					"you want to access"),
+			@ApiImplicitParam(name = "pageSize", dataType = "integer", paramType = "query", value = "Specifies the " +
+					"amount of items per page"),
+			@ApiImplicitParam(name = "sort", dataType = "string", allowMultiple =true, paramType = "query", value =
+					"Sorts results by variable of choice")
+
+					   })
+
     @GetMapping(value = "/students", produces = {"application/json"})
     public ResponseEntity<?> listAllStudents(@PageableDefault Pageable pageable)
     {
@@ -32,6 +45,13 @@ public class StudentController
         return new ResponseEntity<>(myStudents, HttpStatus.OK);
     }
 
+
+    @ApiOperation(value = "Returns a single student by id", response = Student.class)
+	@ApiResponses(value = {
+			@ApiResponse(code = 200, message = "Student found", response = Student.class),
+			@ApiResponse(code = 404, message = "Student not found", response = Student.class)
+
+	})
     @GetMapping(value = "/Student/{StudentId}",
                 produces = {"application/json"})
     public ResponseEntity<?> getStudentById(
