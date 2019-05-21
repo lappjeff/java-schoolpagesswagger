@@ -1,5 +1,6 @@
 package com.lambdaschool.school.controller;
 
+import com.lambdaschool.school.model.ErrorDetail;
 import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.service.StudentService;
 import io.swagger.annotations.*;
@@ -12,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.persistence.EntityNotFoundException;
 import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -49,12 +51,12 @@ public class StudentController
     @ApiOperation(value = "Returns a single student by id", response = Student.class)
 	@ApiResponses(value = {
 			@ApiResponse(code = 200, message = "Student found", response = Student.class),
-			@ApiResponse(code = 404, message = "Student not found", response = Student.class)
+			@ApiResponse(code = 404, message = "Student not found", response = ErrorDetail.class)
 
 	})
     @GetMapping(value = "/Student/{StudentId}",
                 produces = {"application/json"})
-    public ResponseEntity<?> getStudentById(
+    public ResponseEntity<?> getStudentById(@ApiParam(value = "student id", required = true, example = "1")
             @PathVariable
                     Long StudentId)
     {
@@ -62,23 +64,39 @@ public class StudentController
         return new ResponseEntity<>(r, HttpStatus.OK);
     }
 
-
+    @ApiOperation(value = "Returns a single student or list of students with names containing the value given, " +
+			"supports pagination",
+				  response = Student.class)
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "Specifies the page " +
+					"you want to access"),
+			@ApiImplicitParam(name = "pageSize", dataType = "integer", paramType = "query", value = "Specifies the " +
+					"amount of items per page"),
+			@ApiImplicitParam(name = "sort", dataType = "string", allowMultiple =true, paramType = "query", value =
+					"Sorts results by variable of choice")
+					   })
     @GetMapping(value = "/student/namelike/{name}",
                 produces = {"application/json"})
-    public ResponseEntity<?> getStudentByNameContaining(@PageableDefault Pageable pageable,
+    public ResponseEntity<?> getStudentByNameContaining(@ApiParam(value = "Student name or name fragment", required =
+			true, example = "John") @PageableDefault Pageable pageable,
             @PathVariable String name)
     {
         List<Student> myStudents = studentService.findStudentByNameLike(name, pageable);
         return new ResponseEntity<>(myStudents, HttpStatus.OK);
     }
 
+	@ApiOperation(value = "Creates a new student", response = void.class, notes = "URI for new student is found in " +
+			"location header")
+	@ApiResponses({
+			@ApiResponse(code = 201, message = "Student created successfully", response = void.class),
+			@ApiResponse(code = 500, message = "error creating restaurant", response = URISyntaxException.class)
+				  })
 
     @PostMapping(value = "/Student",
                  consumes = {"application/json"},
                  produces = {"application/json"})
-    public ResponseEntity<?> addNewStudent(@Valid
-                                           @RequestBody
-                                                   Student newStudent) throws URISyntaxException
+    public ResponseEntity<?> addNewStudent(@ApiParam(value = "Student Name", required = true)
+											   @Valid @RequestBody Student newStudent) throws URISyntaxException
     {
         newStudent = studentService.save(newStudent);
 
@@ -90,19 +108,30 @@ public class StudentController
         return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
     }
 
+    @ApiOperation(value = "Update an existing student", response = void.class)
+	@ApiResponses({
+			@ApiResponse(code = 404, message = "Student not found", response = EntityNotFoundException.class)
+				  })
+	@ApiImplicitParams({
+			@ApiImplicitParam(name = "Studentid", value = "Id of student being targeted", required = true),
+			@ApiImplicitParam(name = "updateStudent", value = "Body of changes being made to targeted student",
+							  required = true)
+					   })
 
-    @PutMapping(value = "/Student/{Studentid}")
+    @PutMapping(value = "/Student/{Studentid}", consumes = "application/json")
     public ResponseEntity<?> updateStudent(
-            @RequestBody
-                    Student updateStudent,
-            @PathVariable
-                    long Studentid)
+            @RequestBody Student updateStudent,
+            @PathVariable long Studentid)
     {
         studentService.update(updateStudent, Studentid);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-
+	@ApiOperation(value = "Delete an existing student", response = void.class)
+	@ApiResponses({
+			@ApiResponse(code = 404, message = "Student not found", response = EntityNotFoundException.class)
+				  })
+	@ApiImplicitParam(name = "Studentid", required = true, value = "Id of student being deleted")
     @DeleteMapping("/Student/{Studentid}")
     public ResponseEntity<?> deleteStudentById(
             @PathVariable
