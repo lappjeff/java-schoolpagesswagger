@@ -28,7 +28,7 @@ public class StudentController
 
     // Please note there is no way to add students to course yet!
 
-	@ApiOperation(value = "Returns a list of all restaurants, supports pagination", response = Student.class,
+	@ApiOperation(value = "Returns a list of all students, supports pagination", response = Student.class,
 				  responseContainer = "List")
 	@ApiImplicitParams({
 			@ApiImplicitParam(name = "page", dataType = "integer", paramType = "query", value = "Specifies the page " +
@@ -113,6 +113,8 @@ public class StudentController
 			@ApiImplicitParam(name = "courseid", required = true, value = "Id of course being added to student"),
 			@ApiImplicitParam(name = "studentid", required = true, value = "Id of student to add course to")
 					   })
+
+	//TODO ask Jon how to set up a path to the updated student
 	@PostMapping(value = "addstudentcourse/{studentid}/{courseid}",
 				 consumes = "application/json",
 				 produces = "application/json")
@@ -121,8 +123,15 @@ public class StudentController
 	{
 		studentService.addCourseToStudent(studentid, courseid);
 
-		return new ResponseEntity<>(HttpStatus.CREATED);
+		HttpHeaders responseHeaders = new HttpHeaders();
+		URI updatedStudentURI = ServletUriComponentsBuilder.fromCurrentContextPath().path("/students/Student" +
+				"/{studentid}")
+				.buildAndExpand(studentid).toUri();
+		responseHeaders.setLocation(updatedStudentURI);
+
+		return new ResponseEntity<>(null, responseHeaders, HttpStatus.CREATED);
 	}
+
 	@ApiOperation(value = "Update an existing student", response = void.class)
 	@ApiResponses({
 			@ApiResponse(code = 404, message = "Student not found", response = EntityNotFoundException.class)
@@ -139,6 +148,7 @@ public class StudentController
             @PathVariable long Studentid)
     {
         studentService.update(updateStudent, Studentid);
+
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
