@@ -1,5 +1,6 @@
 package com.lambdaschool.school.controller;
 
+import com.lambdaschool.school.handler.ResourceNotFoundException;
 import com.lambdaschool.school.model.Course;
 import com.lambdaschool.school.service.CourseService;
 import com.lambdaschool.school.view.CountStudentsInCourses;
@@ -35,9 +36,11 @@ public class CourseController
 
     @ApiOperation(value = "Deletes a course based off of id")
     @DeleteMapping("/courses/{courseid}")
-    public ResponseEntity<?> deleteCourseById(@PathVariable long courseid)
+    public ResponseEntity<?> deleteCourseById(@PathVariable long courseid) throws ResourceNotFoundException
     {
+
         courseService.delete(courseid);
         return new ResponseEntity<>(HttpStatus.OK);
+
     }
 }

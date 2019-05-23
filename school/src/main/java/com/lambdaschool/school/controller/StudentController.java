@@ -1,5 +1,6 @@
 package com.lambdaschool.school.controller;
 
+import com.lambdaschool.school.handler.ResourceNotFoundException;
 import com.lambdaschool.school.model.ErrorDetail;
 import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.service.StudentService;
@@ -25,8 +26,6 @@ public class StudentController
 {
     @Autowired
     private StudentService studentService;
-
-    // Please note there is no way to add students to course yet!
 
 	@ApiOperation(value = "Returns a list of all students, supports pagination", response = Student.class,
 				  responseContainer = "List")
@@ -57,8 +56,7 @@ public class StudentController
     @GetMapping(value = "/Student/{StudentId}",
                 produces = {"application/json"})
     public ResponseEntity<?> getStudentById(@ApiParam(value = "student id", required = true, example = "1")
-            @PathVariable
-                    Long StudentId)
+            @PathVariable Long StudentId) throws ResourceNotFoundException
     {
         Student r = studentService.findStudentById(StudentId);
         return new ResponseEntity<>(r, HttpStatus.OK);
@@ -79,7 +77,7 @@ public class StudentController
                 produces = {"application/json"})
     public ResponseEntity<?> getStudentByNameContaining(@ApiParam(value = "Student name or name fragment", required =
 			true, example = "John") @PageableDefault Pageable pageable,
-            @PathVariable String name)
+            @PathVariable String name) throws ResourceNotFoundException
     {
         List<Student> myStudents = studentService.findStudentByNameLike(name, pageable);
         return new ResponseEntity<>(myStudents, HttpStatus.OK);
@@ -119,7 +117,7 @@ public class StudentController
 				 consumes = "application/json",
 				 produces = "application/json")
 	public ResponseEntity<?> addCourseToStudent(@PathVariable long studentid,
-												@PathVariable long courseid)
+												@PathVariable long courseid) throws ResourceNotFoundException
 	{
 		studentService.addCourseToStudent(studentid, courseid);
 
@@ -145,7 +143,7 @@ public class StudentController
     @PutMapping(value = "/Student/{Studentid}", consumes = "application/json")
     public ResponseEntity<?> updateStudent(
             @RequestBody Student updateStudent,
-            @PathVariable long Studentid)
+            @PathVariable long Studentid) throws ResourceNotFoundException
     {
         studentService.update(updateStudent, Studentid);
 
@@ -160,7 +158,7 @@ public class StudentController
     @DeleteMapping("/Student/{Studentid}")
     public ResponseEntity<?> deleteStudentById(
             @PathVariable
-                    long Studentid)
+                    long Studentid) throws ResourceNotFoundException
     {
         studentService.delete(Studentid);
         return new ResponseEntity<>(HttpStatus.OK);
