@@ -1,23 +1,29 @@
 ***Course Curls***
 
-curl -X GET http://localhost:2019/courses/courses
+curl -X GET http://localhost:2019/courses/courses -H "Authorization: Bearer {access_token}
 
-curl -X GET localhost:2019/courses/studcount
+curl -X GET localhost:2019/courses/studcount -H "Authorization: Bearer {access_token}
 
-curl -X DELETE localhost:2019/courses/{courseid}
+curl -X DELETE localhost:2019/courses/courses/3 -H "Authorization: Bearer {access_token}"
 
 ***Student curls***
 
-curl -X GET localhost:2019/students/students
+curl -X GET localhost:2019/students/students -H "Authorization: Bearer {access_token}"
 
-curl -X GET localhost:2019/students/Student/{studentid}
+curl -X GET localhost:2019/students/Student/{studentid} -H "Authorization: Bearer {access_token}"
 
-curl -X GET localhost:2019/students/student/namelike/{name}
+curl -X GET localhost:2019/students/student/namelike/{name} -H "Authorization: Bearer {access_token}"
 
-curl -X POST localhost:2019/students/Student/ -d "{\"studname\": \"Curl Student\" }" -H "Content-Type: application/json"
+curl -X POST localhost:2019/students/Student -H "Authorization: Bearer {access_token}" -d "{\"studname\": \"Curl Student\" }" -H "Content-Type: application/json"
 
 How would I pass a content type for query parameters within a post?
 
-curl -X POST localhost:2019/students/addstudentcourse/{studentid}/{courseid}
+curl -X POST localhost:2019/students/addstudentcourse/{studentid}/{courseid} -H "Authorization: Bearer {access_token}"
 
-curl -X PUT localhost:2019/students/Student/{studentid} -d "{\"studname\": \"Updated Curl Boi\"}" -H "Content-Type: application/json"
+curl -X PUT localhost:2019/students/Student/{studentid} -H "Authorization: Bearer 786a2d76-4551-49f2-8211-a69b0ea12715 -d "{\"studname\": \"Updated Curl Boi\"}" -H "Content-Type: application/json"
+
+***Get token from server***
+
+curl -X POST http://localhost:2019/oauth/token --user "lambda-client:lambda-secret" -d "grant_type=password&username=admin&password=password"
+
+786a2d76-4551-49f2-8211-a69b0ea12715

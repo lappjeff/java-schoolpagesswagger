@@ -94,6 +94,7 @@ public class User extends Auditable
 	{
 		List<SimpleGrantedAuthority> rtnList = new ArrayList<>();
 
+		//Todo ROLE prefix is not getting added properly.
 		for (UserRoles r : this.userRoles)
 		{
 			String myRole = "ROLE_" + r.getRole().getRolename().toUpperCase();
