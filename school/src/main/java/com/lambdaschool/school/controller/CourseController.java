@@ -1,9 +1,8 @@
 package com.lambdaschool.school.controller;
 
-import com.lambdaschool.school.handler.ResourceNotFoundException;
+import com.lambdaschool.school.exception.ResourceNotFoundException;
 import com.lambdaschool.school.model.Course;
 import com.lambdaschool.school.service.CourseService;
-import com.lambdaschool.school.view.CountStudentsInCourses;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

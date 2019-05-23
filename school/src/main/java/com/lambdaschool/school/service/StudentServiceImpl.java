@@ -1,7 +1,6 @@
 package com.lambdaschool.school.service;
 
-import com.lambdaschool.school.handler.ResourceNotFoundException;
-import com.lambdaschool.school.model.Course;
+import com.lambdaschool.school.exception.ResourceNotFoundException;
 import com.lambdaschool.school.model.Student;
 import com.lambdaschool.school.repository.CourseRepository;
 import com.lambdaschool.school.repository.StudentRepository;
@@ -10,7 +9,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 

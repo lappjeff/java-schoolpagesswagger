@@ -1,6 +1,6 @@
 package com.lambdaschool.school.service;
 
-import com.lambdaschool.school.handler.ResourceNotFoundException;
+import com.lambdaschool.school.exception.ResourceNotFoundException;
 import com.lambdaschool.school.model.Course;
 import com.lambdaschool.school.repository.CourseRepository;
 import com.lambdaschool.school.view.CountStudentsInCourses;
