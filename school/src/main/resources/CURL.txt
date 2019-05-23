@@ -26,4 +26,3 @@ curl -X PUT localhost:2019/students/Student/{studentid} -H "Authorization: Beare
 
 curl -X POST http://localhost:2019/oauth/token --user "lambda-client:lambda-secret" -d "grant_type=password&username=admin&password=password"
 
-786a2d76-4551-49f2-8211-a69b0ea12715
